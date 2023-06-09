@@ -8,7 +8,7 @@ ANYKERNEL3_DIR=$PWD/AnyKernel3/
 FINAL_KERNEL_ZIP=DFC-Kernel-miatoll-$(date '+%Y%m%d').zip
 export PATH="$HOME/clang17-0-2/bin:$PATH"
 export ARCH=arm64
-export KBUILD_BUILD_HOST=COSMIC
+export KBUILD_BUILD_HOST=COSMOS
 export KBUILD_BUILD_USER=COSMIC
 export KBUILD_COMPILER_STRING="$($HOME/clang17-0-2/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 
@@ -81,3 +81,10 @@ sha1sum $FINAL_KERNEL_ZIP
 BUILD_END=$(date +"%s")
 DIFF=$(($BUILD_END - $BUILD_START))
 echo -e "$yellow Build completed in $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nocol"
+
+echo "**** Uploading your zip now ****"
+if command -v curl &> /dev/null; then
+curl -T $FINAL_KERNEL_ZIP temp.sh
+else
+echo "Zip: $FINAL_KERNEL_ZIP"
+fi
